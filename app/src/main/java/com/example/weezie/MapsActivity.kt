@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
@@ -16,8 +17,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.weezie.databinding.ActivityMapsBinding
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.PointOfInterest
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnPoiClickListener {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
@@ -47,31 +49,26 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
 
         // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-        val MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
+        val aliados = LatLng(41.148312, -8.610804)
+        val freamunde = LatLng(41.286561, -8.338962)
+        val lousada = LatLng(41.277479, -8.283738)
+        val saoJoaoDaMadeira = LatLng(40.900524, -8.490672)
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted
-            // request permission from user
-            ActivityCompat.requestPermissions(this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION)
-        } else {
-            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                // Got last known location. In some rare situations this can be null.
-                if (location != null) {
-                    // Logic to handle location object
-                    val latLng = LatLng(location.latitude, location.longitude)
-                    mMap.addMarker(MarkerOptions().position(latLng).title("Current Location"))
 
-                    val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15f)
-                    googleMap.animateCamera(cameraUpdate)
-                }
-            }
-        }
+        mMap.addMarker(MarkerOptions().position(aliados).title("Aliados"))
+        mMap.addMarker(MarkerOptions().position(freamunde).title("Freamunde"))
+        mMap.addMarker(MarkerOptions().position(lousada).title("Lousada"))
+        mMap.addMarker(MarkerOptions().position(saoJoaoDaMadeira).title("SJ"))
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(aliados))
+        mMap.setOnPoiClickListener(this);
+    }
+
+    override fun onPoiClick(poi: PointOfInterest) {
+        Toast.makeText(this, """Clicked: ${poi.name}
+            Place ID:${poi.placeId}
+            Latitude:${poi.latLng.latitude} Longitude:${poi.latLng.longitude}""",
+            Toast.LENGTH_LONG
+        ).show()
     }
 }
