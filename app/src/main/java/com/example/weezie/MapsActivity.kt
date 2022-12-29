@@ -48,25 +48,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnPoiCli
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
-        val aliados = LatLng(41.148312, -8.610804)
+        val porto = LatLng(41.148312, -8.610804)
         val freamunde = LatLng(41.286561, -8.338962)
         val lousada = LatLng(41.277479, -8.283738)
         val saoJoaoDaMadeira = LatLng(40.900524, -8.490672)
 
 
-        mMap.addMarker(MarkerOptions().position(aliados).title("Aliados"))
-        mMap.addMarker(MarkerOptions().position(freamunde).title("Freamunde"))
-        mMap.addMarker(MarkerOptions().position(lousada).title("Lousada"))
-        mMap.addMarker(MarkerOptions().position(saoJoaoDaMadeira).title("SJ"))
+        mMap.addMarker(MarkerOptions().position(porto).title("Porto").snippet("Porto"))
+        mMap.addMarker(MarkerOptions().position(freamunde).title("Freamunde").snippet("Porto"))
+        mMap.addMarker(MarkerOptions().position(lousada).title("Lousada").snippet("Porto"))
+        mMap.addMarker(MarkerOptions().position(saoJoaoDaMadeira).title("SJ").snippet("Aveiro"))
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(aliados))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(porto))
         mMap.setOnPoiClickListener(this);
     }
 
     override fun onPoiClick(poi: PointOfInterest) {
         Toast.makeText(this, """Clicked: ${poi.name}
-            Place ID:${poi.placeId}
             Latitude:${poi.latLng.latitude} Longitude:${poi.latLng.longitude}""",
             Toast.LENGTH_LONG
         ).show()
